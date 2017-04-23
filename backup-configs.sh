@@ -40,6 +40,8 @@ git push origin mac
 
 echo "backing up launchd"
 cd ~/Documents/Dev/LaunchAgents
-git add com.puddletowndesign.backup.plist com.puddletowndesign.update.plist README.md
+git add .
 git commit -m "updated jobs"
 git push origin master
+
+cd ~/Desktop
