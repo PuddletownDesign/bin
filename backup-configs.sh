@@ -44,4 +44,58 @@ git add .
 git commit -m "updated jobs"
 git push origin master
 
+echo "backing up css snippets"
+cd ~/Documents/Dev/Atom-Packages/puddletown-css-snippets
+git add .
+git commit -m "updated snippets"
+git push origin master
+
+echo "backing up d3 snippets"
+cd ~/Documents/Dev/Atom-Packages/puddletown-d3-snippets
+git add .
+git commit -m "updated snippets"
+git push origin master
+
+echo "backing up gulp snippets"
+cd ~/Documents/Dev/Atom-Packages/puddletown-gulp-snippets
+git add .
+git commit -m "updated snippets"
+git push origin master
+
+echo "backing up HTML snippets"
+cd ~/Documents/Dev/Atom-Packages/puddletown-html-snippets
+git add .
+git commit -m "updated snippets"
+git push origin master
+
+echo "backing up javascript browser snippets"
+cd ~/Documents/Dev/Atom-Packages/puddletown-javascript-browser-snippets
+git add .
+git commit -m "updated snippets"
+git push origin master
+
+echo "backing up javascript node snippets"
+cd ~/Documents/Dev/Atom-Packages/puddletown-javascript-node-snippets
+git add .
+git commit -m "updated snippets"
+git push origin master
+
+echo "backing up javascript snippets"
+cd ~/Documents/Dev/Atom-Packages/puddletown-javascript-snippets
+git add .
+git commit -m "updated snippets"
+git push origin master
+
+echo "backing up react snippets"
+cd ~/Documents/Dev/Atom-Packages/puddletown-react-snippets
+git add .
+git commit -m "updated snippets"
+git push origin master
+
+echo "backing up HTML language"
+cd ~/Documents/Dev/Atom-Packages/puddletown-language-html
+git add .
+git commit -m "updated snippets"
+git push origin master
+
 cd ~/Desktop
