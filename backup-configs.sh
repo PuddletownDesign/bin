@@ -45,55 +45,55 @@ git commit -m "updated jobs"
 git push origin master
 
 echo "backing up css snippets"
-cd ~/Documents/Dev/Atom/packages/puddletown-css-snippets
+cd ~/Documents/Dev/Atom-packages/puddletown-css-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 
 echo "backing up d3 snippets"
-cd ~/Documents/Dev/Atom/packages/puddletown-d3-snippets
+cd ~/Documents/Dev/Atom-packages/puddletown-d3-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 
 echo "backing up gulp snippets"
-cd ~/Documents/Dev/Atom/packages/puddletown-gulp-snippets
+cd ~/Documents/Dev/Atom-packages/puddletown-gulp-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 
 echo "backing up HTML snippets"
-cd ~/Documents/Dev/Atom/packages/puddletown-html-snippets
+cd ~/Documents/Dev/Atom-packages/puddletown-html-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 
 echo "backing up javascript browser snippets"
-cd ~/Documents/Dev/Atom/packages/puddletown-javascript-browser-snippets
+cd ~/Documents/Dev/Atom-packages/puddletown-javascript-browser-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 
 echo "backing up javascript node snippets"
-cd ~/Documents/Dev/Atom/packages/puddletown-javascript-node-snippets
+cd ~/Documents/Dev/Atom-packages/puddletown-javascript-node-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 
 echo "backing up javascript snippets"
-cd ~/Documents/Dev/Atom/packages/puddletown-javascript-snippets
+cd ~/Documents/Dev/Atom-packages/puddletown-javascript-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 
 echo "backing up react snippets"
-cd ~/Documents/Dev/Atom/packages/puddletown-react-snippets
+cd ~/Documents/Dev/Atom-packages/puddletown-react-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 
 echo "backing up HTML language"
-cd ~/Documents/Dev/Atom/packages/puddletown-language-html
+cd ~/Documents/Dev/Atom-packages/puddletown-language-html
 git add .
 git commit -m "updated snippets"
 git push origin master
