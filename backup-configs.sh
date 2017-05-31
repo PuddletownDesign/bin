@@ -16,7 +16,7 @@ git push origin master
 
 echo "backing up git"
 cd ~/Documents/Dev/Git/
-git add .
+git add gitcustom.txt
 git commit -m "updated git preferences"
 git push origin mac
 
