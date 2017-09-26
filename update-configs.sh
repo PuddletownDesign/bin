@@ -1,9 +1,26 @@
 #!/usr/local/bin/zsh
 
-brew cu -ay --cleanup
-brew update
-brew cleanup
-brew upgrade
-npm update -g
-apm update --no-confirm
-upgrade_oh_my_zsh
+cd ~/Dev/Config/Brew
+git fetch upstream
+git checkout mac
+git merge upstream/mac --no-edit
+
+cd ~/Dev/Config/Atom
+git fetch upstream
+git checkout mac
+git merge upstream/mac --no-edit
+
+cd ~/Dev/Config/Git
+git fetch upstream
+git checkout mac
+git merge upstream/mac --no-edit
+
+cd ~/Dev/Config/iTerm
+git fetch upstream
+git checkout mac
+git merge upstream/mac --no-edit
+
+cd ~/Dev/Config/ZSH
+git fetch upstream
+git checkout mac
+git merge upstream/mac --no-edit
