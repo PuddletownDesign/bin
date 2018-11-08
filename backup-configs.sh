@@ -12,14 +12,14 @@ apm list --installed --bare > packages.list
 git add .
 git commit -m "updated atom preferences"
 git push origin mac
-# echo "................................."
-# echo "backing up brew"
-# cd ~/Dev/Config/Brew
-# brew list > packages.list
-# brew cask list > casks-all.list
-# git add .
-# git commit -m "updated brew packages"
-# git push origin mac
+echo "................................."
+echo "backing up brew"
+cd ~/Dev/Config/Brew
+brew list > packages.list
+brew cask list > casks-all.list
+git add .
+git commit -m "updated brew packages"
+git push origin mac
 echo "................................."
 echo "backing up git"
 cd ~/Dev/Config/Git/
