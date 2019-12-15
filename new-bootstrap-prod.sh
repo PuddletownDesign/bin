@@ -3,7 +3,7 @@
 # Set up script for the production server
 
 WWW="/var/www"
-ipaddr=$(hostname -I | awk '{print $2}')
+ipaddr=$(hostname -I | awk '{print $1}')
 
 # Initial Set up
 echo "-------------------------------------------"
