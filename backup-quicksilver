@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Set the initial variables
+backup_date=$(date +'%Y-%m-%d-%_H-%M-%S')
+backup_dir="/Users/Brent/Config/Quicksilver/User Library Backups/$backup_date"
+
+# Back up quicksilver to Google Drive
+mkdir -p {"$backup_dir/Application Support","$backup_dir/Caches","$backup_dir/Preferences"}
+
+# Now Copy
+rsync -aP  "/Users/Brent/Library/Application Support/Quicksilver" "$backup_dir/Application Support/"
+rsync -aP "/Users/Brent/Library/Caches/Quicksilver" "$backup_dir/Caches/"
+cp "/Users/Brent/Library/Preferences/com.blacktree.Quicksilver.plist" "$backup_dir/Preferences/com.blacktree.Quicksilver.plist"

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+## backup dir format ##
+echo -n "Enter a device name > "
+read device_name
+echo "device: $device_name"

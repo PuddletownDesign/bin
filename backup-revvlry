@@ -1,0 +1,25 @@
+#!/usr/local/bin/bash
+
+# Sync all the files on the phone
+
+
+
+
+
+
+
+## backup dir format ##
+today=$(date +'%Y-%m-%d-%_H-%M-%S')
+bu_dir="/Users/Brent/Sync/Phone - Tmobile Revvlry/Backups"
+dest="$bu_dir/$today"
+int_src="/storage/self/primary"
+sd_src="/sdcard/"
+org_dir=$PWD
+mkdir -p "$dest"
+
+# Go into the
+cd "$dest"
+adb pull -a -p "$int_src"
+adb pull -a -p "$sd_src"
+
+cd "$org_dir"

@@ -1,0 +1,59 @@
+#!/usr/local/bin/bash
+
+# Performs a rSync Back up to the Storage Drive
+
+# rSync command
+# z - compress
+# a - archive (rlptgoD)
+# P - progress and partial (allows resuming aborted syncs)
+# v - verbose
+# l - copy symlinks as links
+# h - human readable
+# -  a
+# # n - dry run
+#
+# -r, --recursive - counterpart to archive
+# -l, --links      # copy symlinks as links
+# -p, --perms      # preserve permissions
+# -t, --times      # preserve times
+# -g, --group      # preserve group
+# -o, --owner      # preserve owner
+# -D               # --devices --specials
+# --exclude={.'DS_Store','.Trashes','.Spotlight-V100','.fseventsd'} # common mac excludes
+
+# Archive - copies the files exactly, times, permissions owners
+# Sync - does not copy the owner, groups or permissions. DOES copy times,
+# Merge - doesn't delete files not in origin only adds to files
+# Mirror - deletes files not found in origin, keeps both directories in sync
+
+# Archives
+# Preserves permissions and all file data
+# alias rsync-merge-archive="rsync -zaPvh --stats" # Archive Merge, preserves permissions, copies and does not delete orphans
+# alias rsync-merge-archive-dry-run="rsync -zaPvhn --stats"  # Archive Merge, preserves permissions, copies and does not delete orphans
+
+# alias rsync-mirror-archive="rsync -zaPvh --stats --delete" # Mirror Merge DOES Delete orphans, preserves permissions, copies
+# alias rsync-mirror-archive-dry-run="rsync -zaPvhn --stats --delete" # Mirror Merge DOES Delete orphans, preserves permissions, copies
+
+#  Syncs
+# ## Doesn't preserve permissions
+# alias rsync merge-sync="rsync -rzPvhltD --stats" # Archive Merge, preserves permissions, copies and does not delete orphans
+# alias rsync-merge-sync-dry-run="rsync -rzPvhltDn --stats"  # Archive Merge, preserves permissions, copies and does not delete orphans
+
+# alias rsync-mirror-sync="rsync -rzPvhltD --stats --delete" # Mirror Merge DOES Delete orphans, DOES NOT preserves permissions, copies
+# alias rsync-mirror-sync-dry-run="rsync -rzPvhltDn --stats --delete" # Mirror Merge DOES Delete orphans, DOES NOT preserves permissions, copies
+
+# User Folder Backup - make sure external drive is connected or just skip it
+if [[  -d '/Volumes/Storage 4TB' && ! -h '/Volumes/Storage 4TB'  ]]; then
+  # rsync -zaPvh --stats --exclude={'.DS_Store','.Trashes','.Trash','.Spotlight-V100','.fseventsd'} ~/ '/Volumes/Storage 4TB/Backups/'
+  rsync -zaPlvhn --stats --exclude='.DS_Store' "~/" "/Volumes/Storage 4TB/Backups/MacOS/Heirarchical"
+else
+    echo "back up not made: external drive not connected"
+fi
+
+# if [[  -d '/Volumes/Storage 4TB' && ! -h '/Volumes/Storage 4TB'  ]]; then
+#
+#   rsync -aPn --info=progress2 --stats --exclude={'.DS_Store','.Trashes','.Trash','.Spotlight-V100','.fseventsd'} '~/Writing' '/Volumes/Storage 4TB/Backups/MacOS/Heirarchical'
+#
+# else
+#    echo "Skipping backup: not made, external drive not connected"
+#fi

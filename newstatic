@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ -n "$1" ]; then
+	domain=$1
+	
+	echo "Moving to localhost directory"
+	cd /Users/Brent/Files/Sites/Projects/localhost/
+
+	git clone static-website-template/ $1
+
+	echo "opening in finder..."
+	open $1
+
+	echo "opening $1 in textmate..."
+	mate $1
+
+	echo "opening http://localhost/$1/ in browser"
+	open "http://localhost/$1/"
+
+	echo "[Process Complete Sucka]"
+
+	exit
+	
+else
+	echo "please enter the name of the static project to create in the localhost directory after the command. Ex. newstatic zombo.com"
+	read project_name
+fi

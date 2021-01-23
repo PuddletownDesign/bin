@@ -1,0 +1,18 @@
+#!/usr/local/bin/bash
+
+# Backup Everything on the phone to the devices directory
+
+## backup dir format ##
+backup_dir=$(date +'%Y-%m-%d-%_H-%M-%S')
+# Get current directory
+og_dir=pwd
+
+# Male the backup directory and cd into it
+mkdir -p "/Users/Brent/Devices/Phone - Google Pixel 4a/Backups/$backup_dir" && \
+cd "/Users/Brent/Devices/Phone - Google Pixel 4a/Backups/$backup_dir"
+
+# Pull the entire backup
+adb pull -a "/storage/self/primary/"
+
+echo "Backup complete!"
+echo "/Users/Brent/Devices/Phone - Google Pixel 4a/Backups/$backup_dir"

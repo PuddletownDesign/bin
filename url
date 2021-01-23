@@ -1,0 +1,15 @@
+#!/usr/bin/bash bats
+##################################
+# Url(ify)                       #
+# Bash Script to turn any string # 
+# into a url friendly slug       #
+##################################
+
+# Strip all non alpha numberic characters
+
+# turn all letters lowercase
+
+# turn spaces to dashes
+
+# test
+

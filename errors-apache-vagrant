@@ -1,0 +1,2 @@
+#!/bin/bash
+printf '\e[8;10;80t' && ssh vagrant 'tail -f /var/log/apache2/error.log'

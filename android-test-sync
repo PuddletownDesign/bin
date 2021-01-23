@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# 10.1.10.26
+# /Users/Brent/Sync/Pixel4a/Sync
+# /Users/Brent/Sync/Pixel4a/Backup
+# backup_dir=$(date +'%Y-%m-%d-%_H-%M-%S')
+
+# Perform Total Backup
+backup_dir=$(date +'%Y-%m-%d-%_H-%M-%S')
+
+# Create Required Local directories for the device
+mkdir -p {/Users/Brent/Sync/Pixel4a/Sync,/Users/Brent/Sync/Pixel4a/Backup}
+
+# 1. Do a total Backup of device
+mkdir -p "/Users/Brent/Sync/Pixel4a/Sync"
+mkdir -p "/Users/Brent/Sync/Pixel4a/Backup/$backup_dir/"
+rsync  -aP 10.1.10.26/sdcard/Test  /Users/Brent/Sync/Pixel4a/Backup/$backup_dir/Test

@@ -1,0 +1,115 @@
+#!/bin/bash
+
+echo "########################################"
+echo "This bash script creates a new rails project and do the initial svn import with ignoring/deleting files from subversion"
+echo "Please send your feedback to Akhil Bansal<bansalakhil30.10@gmail.com>"
+echo "I have tested this script and it works great on my system."
+echo ""
+echo ""
+echo "                    ###### ATTENTION #######"
+echo ""
+echo ""
+echo "Use this script at your own risk, if your computer explodes its not my fault :-) "
+echo "#######################################"
+
+echo "Enter svn username: "
+read username
+echo "Enter the svn url: "
+read svn_url
+
+echo "Enter Rails Application Path:(eg: /home/akhil/ror): "
+read app_path
+echo "Enter Application Name: "
+read app_name
+echo "Freeze Rails(y/n): "
+read freeze
+
+if [ ${freeze} = y ] || [ ${freeze} = Y ]
+    then
+    freeze="y"
+    echo "Enter Rails version to be freeze (Use hypen[-] instead of dot[.] Ex: 1-2-0)" 	
+    read rails_ver 	
+fi
+
+echo "######################################"
+echo "Please verify the following variables: "
+echo "Svn Username: ${username}"
+echo "Svn URL: ${svn_url}"
+echo "Application Path: ${app_path}"
+echo "Application name: ${app_name}"
+
+if [ ${freeze} = y ] || [ -n rails_ver ]
+  then
+  echo "Rails version to be freeze: ${rails_ver}"
+fi
+
+
+echo "Proceed (y/n)"
+read proceed
+
+if [ ${proceed} = n ] || [ ${proceed} = N ]
+    then
+    echo "Terminating..."
+    exit 0
+elif [ ${proceed} = y ] || [ ${proceed} = Y ]
+    then
+    app_root="${app_path}/${app_name}"
+    echo "Generating rails project: (${app_root})"
+    rails ${app_root}
+
+    echo "SVNinitial import: "
+    svn import ${app_root} ${svn_url} -m "Initial Import" --username $username
+
+
+   
+    rm -rf ${app_root}
+   
+    echo "Checking out from svn: "
+
+    svn checkout ${svn_url} ${app_root}
+    cd ${app_root}
+    echo "Removing all log files from SVN"
+    svn remove log/*
+    echo "commiting..."
+    svn commit -m 'removing all log files from subversion'
+    echo "Ignoring all log files under log dir"
+    svn propset svn:ignore "*.log" log/
+    echo "Updating and commiting..."
+    svn update log/
+    svn commit -m 'Ignoring all files in /log/ ending in .log'
+
+    echo "Ignoring cache, sessions, sockets inside tmp dir"
+    svn propset svn:ignore "*" tmp/sessions tmp/cache tmp/sockets
+    echo "commiting tmp "
+    svn commit -m "Ignoring all files in /tmp/"
+    echo "Updating and commiting again...."
+
+    svn update tmp/
+    svn commit -m 'Ignore the whole tmp/ directory, might not work on subdirectories?'
+    echo "Moving database.yml to database.example"
+    svn move config/database.yml config/database.example
+    echo "commiting..."
+    svn commit -m 'Moving database.yml to database.example to provide a template for anyone who checks out the code'
+    echo "Ignoring database.yml , updating and commiting..."
+    svn propset svn:ignore "database.yml" config/
+    svn update config/
+    svn commit -m 'Ignoring database.yml'
+    echo "Finished."
+
+
+   if [ ${freeze} = y ] || [ -n rails_ver ]
+      then
+	echo "Freezing rails: ${rails_ver}"
+	rake rails:freeze:edge TAG=rel_${rails_ver}
+	echo "adding rails to svn"
+	svn add vendor/rails
+	echo "commiting after freezing rails"
+	svn commit -m "Rails ${rails_ver} freezed"
+   fi
+
+
+
+else
+    echo "Unknown Input. Terminating..."
+	exit 0
+fi

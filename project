@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ -n "$1" ]; then
+	
+
+else
+	#ask what to do
+	
+fi
+
+function new() {
+	
+}
+
+function newstatic() {
+	
+}
+function newdynamic() {
+	
+}
+
+
+echo "########################################"
+echo "Create a new static site"

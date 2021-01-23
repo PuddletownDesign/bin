@@ -1,0 +1,192 @@
+#!/bin/bash
+
+if [ -n "$1" ]; then
+	###################################################
+	###################   Config   ####################
+	###################################################
+	
+	#Leave variables blank if not in use
+	wordpress_repo='http://core.svn.wordpress.org/tags/3.9.1'
+	
+	#the directory that wordpress will be installed to 
+	project_directory='/Users/Brent/Files/Sites/Projects/vhosts'
+
+	#the svn location of the starter theme to check into the new install (leave blank if you have no starter theme)
+	svn_starter_theme="file:///Users/Brent/Files/Sites/svn/lib/PHP/wordpress/themes/puddlejumper/trunk"
+	
+	#The location of your svn repository for checking in projects (aka where the project theme gets checked into)
+	svn_project_directory="file:///Users/Brent/Files/Sites/svn/web"
+	
+	#where your extras/vhost.conf file is located
+	vhostconf="/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf"
+	
+	#for retarting the server with the new vhost when the instal is complete
+	apache_bin="/Applications/MAMP/Library/bin/apachectl"
+	
+	#local mysql settings
+	mysql_bin="/Applications/MAMP/Library/bin/mysql"
+	mysql_user="root"
+	mysql_pass="root"
+	
+	###################################################
+	################### / Config   ####################
+	###################################################
+	
+	#Set the db and domain vars
+	
+	#make the name of the domain/ project directory and the 
+	#name of the database/theme (these don't have the domain extension)
+	#so entering puddletowndesign.com will do the following
+	#  - name the project directory and svn repo puddletowndesign.com
+	#  - name the database and the theme puddletowndesign
+	domain=$1
+	db="${domain%.*}"
+
+
+	################################################
+	# 1. move to project directory (set directory to use here)
+	################################################
+    echo "Setting install location to $project_directory/"
+    cd $project_directory/
+    
+    ################################################
+    # 2. download a copy of wordpress to the vhosts directory
+    ################################################
+ 	echo "Downloading a copy of wordpress trunk"
+  	svn export $wordpress_repo $domain
+ 	echo "Wordpress Download Complete"
+ 	
+ 	################################################
+ 	# 3. Copy the wp-config-sample.php and rename it wp-config.php
+ 	################################################
+ 	echo "Making a new config file"
+  	cp $domain/wp-config-sample.php $domain/wp-config.php
+ 	
+ 	################################################
+ 	# 4. edit the config file
+ 	################################################
+  	sed -i '' "s/database_name_here/$db/g" $domain/wp-config.php
+  	sed -i '' "s/username_here/$mysql_user/g" $domain/wp-config.php
+  	sed -i '' "s/password_here/$mysql_pass/g" $domain/wp-config.php
+    
+    
+    ################################################
+    # 5. move to the theme directory of the new wordpress install
+    ################################################
+    cd $domain/wp-content/themes/
+    
+    
+    ####################################################################
+    # Exports a copy of the starter theme from svn and then imports it
+    # back into it's own svn directory named afer the domain name
+    ####################################################################
+    echo "Exporting a copy of the Puddlejumper WP theme to the new install"
+    
+    #check to see if there already a resository
+  	mkdir temp
+  	mkdir temp/$domain
+  	mkdir temp/$domain/tags
+    mkdir temp/$domain/branches
+ 
+    
+ 	#export a copy of the starter theme
+  	svn export $svn_starter_theme temp/$domain/trunk
+   
+   #check to see if there is already a project
+	svn ls $svn_project_directory/$domain
+	svn_repo_exists=$?
+	
+	if [ $svn_repo_exists -ne 1 ]; then
+		echo "there is already a project with this name, we are going to create a branch of the existing trunk"
+		echo "Enter a name for the old project branch (NO SPACES!!!!!!!! SPACES WILL CAUSE THE SCRIPT TO FAIL ENTER SPACES AS HYPHENS):"
+		read project_branch
+
+		echo "Creating a branch of trunk as $project_branch"
+		svn copy $svn_project_directory/$domain/trunk $svn_project_directory/$domain/branches/$project_branch -m "Creating a branch of trunk as $project_branch"
+		echo "Deleting old trunk file..."
+		svn delete $svn_project_directory/$domain/trunk -m "Deleteing existing trunk"
+		svn import temp/$domain/trunk $svn_project_directory/$domain/trunk -m "$domain First Wordpress Import"
+	else
+		echo "Importng project as usual"
+		svn import temp/$domain $svn_project_directory/$domain -m "$domain First Wordpress Import"
+	fi
+
+	
+	echo "Imported The newly installed theme into SVN as $domain"
+    
+	#check out a new working copy of the site's starter theme
+	echo "checking out the a new working copy"
+	svn checkout $svn_project_directory/$domain/trunk $db
+    
+	#delete the temp directory
+	echo "cleaning up the temp directory..."
+	rm -r temp
+	
+	################################################
+	# Creates a new database
+	################################################
+	if [ -n "$mysql_user" ]; then
+		#Create a new mysql database
+		echo "Creating $db database..."
+		$mysql_bin -u$mysql_user -p$mysql_pass -e "CREATE DATABASE IF NOT EXISTS $db;"
+		echo "$db MYSQL database created..."
+	fi
+    
+	################################################
+	# Creates a new Vhost
+	################################################
+	echo "Modifying the /etc/hosts file"
+	echo "" >> /etc/hosts
+	echo "127.0.0.1 $1" >> /etc/hosts
+	
+	#/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf	
+	echo "Editing the vhost.conf file"
+	
+	echo "" >> $vhostconf
+	echo "<VirtualHost *:80>" >> $vhostconf
+	echo "    ServerName $domain" >> $vhostconf
+	echo "    DocumentRoot \"$project_directory/$domain\"" >> $vhostconf
+	echo "    <Directory \"$project_directory/$domain\">" >> $vhostconf
+	echo "        Options Includes FollowSymLinks" >> $vhostconf
+	echo "        AllowOverride All" >> $vhostconf
+	echo "        Order allow,deny" >> $vhostconf
+	echo "        Allow from all" >> $vhostconf
+	echo "    </Directory>" >> $vhostconf
+	echo "</VirtualHost>" >> $vhostconf
+	echo "" >> $vhostconf
+	
+	echo "Virtual Host has been set up"
+	echo "Retarting Apache"
+	
+	$apache_bin -k restart
+	wait
+	echo "Apache Restarted"
+    
+	#######################################################################
+	####################### Interface Actions :) ##########################
+	#######################################################################
+	open /Applications/MAMP/MAMP.app
+	open /Applications/Cornerstone.app
+	open /Applications/MAMP/logs/php_error.log
+	
+	echo "opening in finder..."
+	open $project_directory/$domain
+    
+	echo "opening $domain wp-theme in textmate..."
+	mate $project_directory/$domain/wp-content/themes/$db
+    
+	echo "opening http://$domain in browser"
+	open "http://$domain/"
+    
+	echo "[Process Complete!]"
+   
+	exit	
+
+else
+	echo "enter the name of the domain name for the new wordpress site"
+	echo ""
+	echo "a new directory and virtual host in the vhosts/directory will be created and a new database will be installed locally"
+	echo ""
+	read project_name
+	exit;
+fi

@@ -1,0 +1,53 @@
+#!/bin/bash
+
+function setup () {
+	echo "########################################"
+	echo "Create a new web app"
+	echo "Created in vhosts directory"
+	echo "########################################"
+
+	if [ -n "$1" ]; then
+		app_name=$1
+	else
+		echo "Enter the name of the application"
+		read app_name
+	fi
+	
+	echo ""
+	echo "creating $app_name..."
+	echo ""
+
+	echo "Include PHP Framework Library?"
+	echo "yes to make app portable / no to use development library"
+	echo "(y/n)"
+	read include_lib
+
+	echo ""
+	echo "Include Mobile JS Library?"
+	echo "(y/n)"
+	read include_mobile
+
+	echo ""
+	echo "########################################"
+	echo "Setup Complete, Building Project"
+	echo "########################################"
+}
+
+setup()
+
+
+#create temp project directory
+#create svn structure
+#export repo to temp
+
+#export lib if enabled
+#export mobile if enabled
+
+#import the temp forlder to svn
+
+#checkout the new project
+
+#Set Up a new vHost
+
+
+

@@ -1,112 +1,112 @@
 #!/bin/bash
 
 echo "backing up bin"
-cd ~/Dev/Config/bin
+cd ~/Config/bin
 git add .
 git commit -m "updated biniaries"
 git push origin master
 echo "................................."
 echo "backing up Atom"
-cd ~/Dev/Config/Atom
+cd ~/Config/Atom
 apm list --installed --bare > packages.list
 git add .
 git commit -m "updated atom preferences"
 git push origin mac
 echo "................................."
 echo "backing up brew"
-cd ~/Dev/Config/Brew
+cd ~/Config/Brew
 brew list > packages.list
 brew cask list > casks-all.list
 git add .
 git commit -m "updated brew packages"
-git push origin mac
+git push origin master
 echo "................................."
 echo "backing up git"
-cd ~/Dev/Config/Git/
-git add .
+cd ~/Config/Git/
+git add `.`
 git commit -m "updated git preferences"
-git push origin mac
+git push origin master
 echo "................................."
 echo "backing up installer"
-cd ~/Dev/Config/Installer
+cd ~/Config/Installer
 git add .
 git commit -m "updated installer preferences"
-git push origin mac
+git push origin master
 echo "................................."
 echo "backing up iterm"
-cd ~/Dev/Config/iTerm
+cd ~/Config/iTerm
 git add .
 git commit -m "updated iterm preferences"
-git push origin mac
+git push origin master
 echo "................................."
 echo "backing up zsh"
-cd ~/Dev/Config/ZSH
+cd ~/Config/ZSH
 git add .
 git commit -m "updated zsh preferences"
-git push origin mac
+git push origin master
 echo "................................."
 echo "backing up launchd"
-cd ~/Dev/Config/LaunchAgents
+cd ~/Config/LaunchAgents
 git add .
 git commit -m "updated jobs"
 git push origin master
 echo "................................."
 echo "backing up css snippets"
-cd ~/Dev/Config/Atom-packages/puddletown-css-snippets
+cd ~/Config/Atom-packages/puddletown-css-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 echo "................................."
 echo "backing up d3 snippets"
-cd ~/Dev/Config/Atom-packages/puddletown-d3-snippets
+cd ~/Config/Atom-packages/puddletown-d3-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 echo "................................."
 echo "backing up gulp snippets"
-cd ~/Dev/Config/Atom-packages/puddletown-gulp-snippets
+cd ~/Config/Atom-packages/puddletown-gulp-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 echo "................................."
 echo "backing up HTML snippets"
-cd ~/Dev/Config/Atom-packages/puddletown-html-snippets
+cd ~/Config/Atom-packages/puddletown-html-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 echo "................................."
 echo "backing up javascript browser snippets"
-cd ~/Dev/Config/Atom-packages/puddletown-javascript-browser-snippets
+cd ~/Config/Atom-packages/puddletown-javascript-browser-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 echo "................................."
 echo "backing up javascript node snippets"
-cd ~/Dev/Config/Atom-packages/puddletown-javascript-node-snippets
+cd ~/Config/Atom-packages/puddletown-javascript-node-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 echo "................................."
 echo "backing up javascript snippets"
-cd ~/Dev/Config/Atom-packages/puddletown-javascript-snippets
+cd ~/Config/Atom-packages/puddletown-javascript-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 echo "................................."
 echo "backing up react snippets"
-cd ~/Dev/Config/Atom-packages/puddletown-react-snippets
+cd ~/Config/Atom-packages/puddletown-react-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master
 echo "................................."
 echo "backing up HTML language"
-cd ~/Dev/Config/Atom-packages/puddletown-language-html
+cd ~/Config/Atom-packages/puddletown-language-html
 git add .
 git commit -m "updated snippets"
 git push origin master
 echo "................................."
 echo "backing up Vue snippets"
-cd ~/Dev/Config/Atom-packages/puddletown-vue-snippets
+cd ~/Config/Atom-packages/puddletown-vue-snippets
 git add .
 git commit -m "updated snippets"
 git push origin master

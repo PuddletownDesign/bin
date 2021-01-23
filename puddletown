@@ -1,0 +1,105 @@
+#!/bin/bash
+
+#Manual Steps
+
+#	REMOTE
+#	-----------------------------------
+#	ssh brent@104.236.177.166
+#	cd	/home/brent/server/domains/
+#	mkdir {site}
+#	cd /home/brent/server/git
+#	mkdir {site}.git
+#	cd {site}.git
+#	git init --bare
+#	cd hooks
+#	touch post-receive
+#	cat post-receive
+#	git --work-tree=/home/brent/server/domains/{site} --git-dir=/home/brent/server/git/{site}.git checkout -f
+#	chmod +x post-receive
+#	exit
+#
+#	LOCAL
+#	-----------------------------------
+#	cd /Users/Brent/Files/Sites/Projects/localhost
+#	git clone /Users/Brent/Files/Sites/Projects/localhost/static-website-template
+#	cd /Users/Brent/Files/Sites/Projects/localhost/{site}
+#	git remote rm origin
+#	git remote add live ssh://$ssh_login$repo_path/$1.git
+
+#ssh -t brent@104.236.177.166 'sudo ls'
+
+if [ -n "$1" ]; then
+	####################################################
+	####################   Config   ####################
+	####################################################
+	#ssh login (set up keys with host first)
+	ssh_login='brent@104.236.177.166'
+	#directory where the site will be deployed to
+	live_path='/home/brent/server/domains'
+	#where the live repo where live
+	repo_path='/home/brent/server/git'
+	#the default directory where new projects are created
+	project_path='/Users/Brent/Files/Sites/Projects/localhost'
+	#the default project template git repo. if left black an empty folder will be created
+	project_template='/Users/Brent/Files/Sites/Projects/localhost/static-website-template'
+	#server sudo password (needed to create an nginx server block)
+	password=""
+
+	####################################################
+	####################     App    ####################
+	####################################################
+	#create the repo and project folder
+ssh -t $ssh_login << ENDHERE
+	echo 'logged into ssh'
+	mkdir $live_path/$1
+	mkdir $live_path/$1/public
+	touch $live_path/$1/public/index.php
+	echo $1 >> $live_path/$1/public/index.php
+	echo "created temporary index file"
+	echo "created project live folder: $live_path/$1"
+	cd $repo_path/
+	mkdir $1.git
+	echo "created repo at $repo_path/$1.git"
+	cd $1.git
+	git init --bare
+	echo "initialized project live repo at $repo_path/$1.git"
+	cd hooks
+	touch post-receive
+	echo '#!/bin/sh' >> post-receive
+	echo "git --work-tree=$live_path/$1 --git-dir=$repo_path/$1.git checkout -f" >> post-receive
+	chmod +x post-receive
+	echo 'created and updated post-receive in repo'
+
+ENDHERE
+
+	#create new nginx server block
+	#sudo touch /etc/nginx/sites-available/$1;
+
+	#ssh -t $ssh_login"
+	#sudo sh -c \"sed s/SITENAME/$1/g /etc/nginx/sites-available/template > /etc/nginx/sites-available/$1\";
+	#"
+
+	#FUCK YOU BASH AND NGINX SERVER BLOCKS!!!!!
+	#sudo ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/;
+	#sudo service nginx restart;
+
+	#set up local project folder
+	cd  $project_path
+	git clone $project_template $1 -b master
+	cd  $project_path/$1
+	echo "cloned default template to $project_path"
+	git remote rm origin
+	git init
+	echo "performed initial local git commit"
+
+	git remote add live ssh://$ssh_login$repo_path/$1.git
+	echo 'added live repo to newly created local project'
+	##open project in textmate
+	mate $project_path/$1
+
+	cd  $project_path/$1
+
+else
+	echo "please enter the name of the static project to create in the localhost directory after the command. Ex. newstatic zombo.com"
+	read project_name
+fi

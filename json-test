@@ -1,0 +1,11 @@
+#!/usr/local/bin/bash
+
+
+# log="/Users/Brent/Config/Logs/macbook-backup.log"
+# args="-aPq --stats"
+# exclude="'.DS_Store','.Trashes','.Trash','.Spotlight-V100','.fseventsd'"
+# backup_drive="/Volumes/Storage 4TB"
+# backup_folder="Backups/MacOS/Heirarchical"
+# source="~/"
+# target="$backupdrive/$backup_folder"
+# begin=$(date '+%Y-%m-%d %H:%M:%S')

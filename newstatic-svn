@@ -1,0 +1,74 @@
+#!/bin/bash
+
+
+
+if [ -n "$1" ]; then
+	svn_project_directory="file:///Users/Brent/Files/Sites/svn/web"
+	domain=$1
+	
+	echo "Moving to localhost directory"
+	cd /Users/Brent/Files/Sites/Projects/localhost/
+
+	
+	
+	#check if the repo already exists
+	svn ls $svn_project_directory/$domain
+	svn_repo_exists=$?
+	
+	if [ $svn_repo_exists -ne 1 ]; then
+		echo "there is already a project with this name, we are going to create a branch of the existing trunk"
+		echo "Enter a name for the old project branch (NO SPACES!!!!!!!! SPACES WILL CAUSE THE SCRIPT TO FAIL ENTER SPACES AS HYPHENS):"
+		read project_branch
+
+		echo "Creating a branch of trunk as $project_branch"
+		svn copy $svn_project_directory/$domain/trunk $svn_project_directory/$domain/branches/$project_branch -m "Creating a branch of trunk as $project_branch"
+		echo "Deleting old trunk file..."
+		svn delete $svn_project_directory/$domain/trunk -m "Deleteing existing trunk"
+		
+		echo "exporting a copy of the static app template"
+		svn export file:///Users/Brent/Files/Sites/svn/lib/PHP/templates/static-website/trunk temp/$1/trunk
+		
+		svn import temp/$domain/trunk $svn_project_directory/$domain/trunk -m "$domain First Redesign Import"
+	else
+		echo "Making SVN directory structure"
+
+		mkdir temp
+		mkdir temp/$1
+		mkdir temp/$1/tags
+		mkdir temp/$1/branches
+		
+		echo "exporting a copy of the static app template"
+		svn export file:///Users/Brent/Files/Sites/svn/lib/PHP/templates/static-website/trunk temp/$1/trunk
+		
+		echo "Importng project as usual"
+		svn import temp/$domain $svn_project_directory/$domain -m "$domain First Import"
+	fi
+
+
+
+	echo "importing new project into svn"
+	svn import temp/$1 file:///Users/Brent/Files/Sites/svn/web/$1 -m "$1 First Import"
+
+	echo "checking out the a new working copy"
+	svn checkout file:///Users/Brent/Files/Sites/svn/web/$1/trunk $1
+
+	echo "cleaning up the temp direcory..."
+	rm -r temp
+
+	echo "opening in finder..."
+	open $1
+
+	echo "opening $1 in textmate..."
+	mate $1
+
+	echo "opening http://localhost/$1/ in browser"
+	open "http://localhost/$1/"
+
+	echo "[Process Complete Sucka]"
+
+	exit
+	
+else
+	echo "please enter the name of the static project to create in the localhost directory after the command. Ex. newstatic zombo.com"
+	read project_name
+fi

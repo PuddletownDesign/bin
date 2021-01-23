@@ -1,0 +1,53 @@
+#!/bin/bash
+
+#FIX ALL VAIABLES IN THIS SHIT BEFORE MAKING EXECUTABLE
+
+echo "Enter a domain (e.g. example.com):";
+read domain;
+echo ""
+echo "Enter a virtual host name (e.g. dev, as in dev.example.com
+Just enter only the virtual host name)"
+read vhname
+echo ""
+
+### Check to see if $domain exists
+if ! grep "${vhname}.${domain}" /etc/apache2/httpd.conf >> /dev/null; then
+        echo "${vhname}.${domain} will be created"
+        echo "Are you sure you want to do this?"
+        read q
+        if [[ "${q}" == "yes" ]] || [[ "${q}" == "y" ]]; then
+                cp /etc/apache2/httpd.conf /etc/apache2/httpd.conf.`date +%Y%m%d%H%M%S`
+
+                if [[ ! -e /var/www/${vhname} ]]; then mkdir /var/www/${vhname}; fi
+                if [[ ! -e /var/www/${vhname}/htdocs ]]; then mkdir /var/www/${vhname}/htdocs; fi
+
+                echo "
+### ${vhname}.${domain}
+<Directory /var/www/${vhname}/htdocs>
+        Options All MultiViews ExecCGI
+        AddHandler cgi-script cgi pl
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+</Directory>
+<VirtualHost *:80>
+        ServerName ${vhname}.${domain}
+        DocumentRoot /var/www/${vhname}/htdocs
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access.log combined
+</VirtualHost>
+</VirtualHost>" >> /etc/apache2/httpd.conf
+
+                echo "Testing configuration"
+                apache2ctl configtest
+                echo "Would you like me to restart the server?"
+                read q
+                if [[ "${q}" == "yes" ]] || [[ "${q}" == "y" ]]; then
+                        apache2ctl restart
+                fi
+        fi
+else
+        echo "${domain} already exists"
+fi
